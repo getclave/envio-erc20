@@ -1,0 +1,7 @@
+export const AavePoolAddresses = [
+  "0xe977f9b2a5ccf0457870a67231f23be4daecfbdb",
+  "0xc48574bc5358c967d9447e7df70230fdb469e4e7",
+  "0xb7b93bcf82519bb757fd18b23a389245dbd8ca64",
+  "0xd4e607633f3d984633e946aea4eb71f92564c1c9",
+  "0xd6cd2c0fc55936498726cacc497832052a9b2d1b",
+];

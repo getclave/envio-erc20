@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.DS_Store
+.idea/
+.vscode/
+
+# Build and generated files
+dist/
+build/
+out/
+.next/
+generated/
+
+# Git
+.git/

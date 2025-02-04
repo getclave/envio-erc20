@@ -1,0 +1,25 @@
+# ACCOUNTS
+
+type Account {
+  id: ID! # User address
+  address: String! @index
+  idleBalances: [AccountIdleBalance!]! @derivedFrom(field: "address")
+  historicalIdleBalances: [HistoricalAccountIdleBalance!]! @derivedFrom(field: "address")
+}
+
+# IDLE
+
+type AccountIdleBalance @index(fields: ["address", "balance"]) {
+  id: ID! # User address + token address
+  address: String! @index
+  balance: BigInt! @index
+  token: String! @index
+}
+
+type HistoricalAccountIdleBalance @index(fields: ["address", "timestamp"]) {
+  id: ID! # User address + token address + timestamp
+  address: String! @index
+  balance: BigInt!
+  token: String! @index
+  timestamp: BigInt! @index
+}

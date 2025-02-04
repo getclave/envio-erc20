@@ -1,0 +1,8 @@
+export const VenusPoolAddresses = [
+  "0x84064c058f2efea4ab648bb6bd7e40f83ffde39a",
+  "0x1af23bd57c62a99c59ad48236553d0dd11e49d2d",
+  "0x69cda960e3b20dfd480866fffd377ebe40bd0a46",
+  "0xaf8fd83cfcbe963211faaf1847f0f217f80b4719",
+  "0x1fa916c27c7c2c4602124a14c77dbb40a5ff1be8",
+  "0x697a70779c1a03ba2bd28b7627a902bff831b616",
+];

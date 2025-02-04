@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: clave-indexer
+description: Clave Balances Indexer
+networks:
+  - id: 324
+    start_block: 24805087
+    contracts:
+      - name: ERC20 # Both for ERC20Transfer and Venus
+        handler: src/ERC20Handler.ts
+        events:
+          - event: "Transfer(address indexed from, address indexed to, uint256 value)"
+rollback_on_reorg: false
+#* 9767 syncswap first block
+#* 43552171 venus first block
+#* 24805087 clave first block
+#* 52887531 clagg first block
+#* 44671523 aave first block
