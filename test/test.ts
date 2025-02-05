@@ -299,23 +299,28 @@ describe("ERC20Handler", () => {
       });
 
       // Check historical record for sender
-      const senderHistoricalBalance = mockDbAfterTransfer.entities.HistoricalAccountIdleBalance.get(
-        userAddress1.toLowerCase() + tokenId.toLowerCase() + roundTimestamp(1000, 3600).toString()
-      );
+      const senderHistoricalBalance =
+        mockDbAfterTransfer.entities.HistoricalAccountIdleBalance4Hours.get(
+          userAddress1.toLowerCase() +
+            tokenId.toLowerCase() +
+            roundTimestamp(1000, 3600 * 4).toString()
+        );
       assert.equal(
         senderHistoricalBalance?.timestamp,
-        BigInt(roundTimestamp(1000, 3600)),
+        BigInt(roundTimestamp(1000, 3600 * 4)),
         "Should create historical record with rounded timestamp for sender"
       );
 
       // Check historical record for receiver
       const receiverHistoricalBalance =
-        mockDbAfterTransfer.entities.HistoricalAccountIdleBalance.get(
-          userAddress2.toLowerCase() + tokenId.toLowerCase() + roundTimestamp(1000, 3600).toString()
+        mockDbAfterTransfer.entities.HistoricalAccountIdleBalance4Hours.get(
+          userAddress2.toLowerCase() +
+            tokenId.toLowerCase() +
+            roundTimestamp(1000, 3600 * 4).toString()
         );
       assert.equal(
         receiverHistoricalBalance?.timestamp,
-        BigInt(roundTimestamp(1000, 3600)),
+        BigInt(roundTimestamp(1000, 3600 * 4)),
         "Should create historical record with rounded timestamp for receiver"
       );
     });
@@ -358,12 +363,15 @@ describe("ERC20Handler", () => {
       });
 
       // Both transfers should create only one historical record per address for that hour
-      const senderHistoricalBalance = mockDbAfterTransfer.entities.HistoricalAccountIdleBalance.get(
-        userAddress1.toLowerCase() + tokenId.toLowerCase() + roundTimestamp(1000, 3600).toString()
-      );
+      const senderHistoricalBalance =
+        mockDbAfterTransfer.entities.HistoricalAccountIdleBalance4Hours.get(
+          userAddress1.toLowerCase() +
+            tokenId.toLowerCase() +
+            roundTimestamp(1000, 3600 * 4).toString()
+        );
       assert.equal(
         senderHistoricalBalance?.timestamp,
-        BigInt(roundTimestamp(1000, 3600)),
+        BigInt(roundTimestamp(1000, 3600 * 4)),
         "Should have one historical record for multiple transfers in same hour"
       );
     });
@@ -406,22 +414,26 @@ describe("ERC20Handler", () => {
       });
 
       // Check historical record for first hour
-      const firstHourBalance = mockDbAfterTransfer.entities.HistoricalAccountIdleBalance.get(
-        userAddress1.toLowerCase() + tokenId.toLowerCase() + roundTimestamp(3600, 3600).toString()
+      const firstHourBalance = mockDbAfterTransfer.entities.HistoricalAccountIdleBalance4Hours.get(
+        userAddress1.toLowerCase() +
+          tokenId.toLowerCase() +
+          roundTimestamp(3600, 3600 * 4).toString()
       );
       assert.equal(
         firstHourBalance?.timestamp,
-        BigInt(roundTimestamp(3600, 3600)),
+        BigInt(roundTimestamp(3600, 3600 * 4)),
         "Should have historical record for first hour"
       );
 
       // Check historical record for second hour
-      const secondHourBalance = mockDbAfterTransfer.entities.HistoricalAccountIdleBalance.get(
-        userAddress1.toLowerCase() + tokenId.toLowerCase() + roundTimestamp(7200, 3600).toString()
+      const secondHourBalance = mockDbAfterTransfer.entities.HistoricalAccountIdleBalance4Hours.get(
+        userAddress1.toLowerCase() +
+          tokenId.toLowerCase() +
+          roundTimestamp(7200, 3600 * 4).toString()
       );
       assert.equal(
         secondHourBalance?.timestamp,
-        BigInt(roundTimestamp(7200, 3600)),
+        BigInt(roundTimestamp(7200, 3600 * 4)),
         "Should have historical record for second hour"
       );
     });

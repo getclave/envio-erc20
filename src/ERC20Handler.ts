@@ -152,42 +152,63 @@ async function PlainTransferHandler(
   const { claveAddresses, senderBalance, receiverBalance } = loaderReturn;
 
   if (claveAddresses.has(event.params.from.toLowerCase())) {
-    // Update sender's balance
-    let accountObject: AccountIdleBalance = {
+    const previousBalance: AccountIdleBalance = {
       id: event.params.from.toLowerCase() + event.srcAddress.toLowerCase(),
-      balance:
-        senderBalance == undefined
-          ? 0n - event.params.value
-          : senderBalance.balance - event.params.value,
+      balance: senderBalance == undefined ? 0n : senderBalance.balance,
       address: event.params.from.toLowerCase(),
       token: event.srcAddress.toLowerCase(),
     };
-
-    context.AccountIdleBalance.set(accountObject);
-    context.HistoricalAccountIdleBalance.set({
-      ...accountObject,
-      id: accountObject.id + roundTimestamp(event.block.timestamp, 3600),
-      timestamp: BigInt(roundTimestamp(event.block.timestamp, 3600)),
-    });
-  }
-
-  if (claveAddresses.has(event.params.to.toLowerCase())) {
-    // Update receiver's balance
-    let accountObject: AccountIdleBalance = {
-      id: event.params.to.toLowerCase() + event.srcAddress.toLowerCase(),
-      balance:
-        receiverBalance == undefined
-          ? event.params.value
-          : event.params.value + receiverBalance.balance,
-      address: event.params.to.toLowerCase(),
-      token: event.srcAddress.toLowerCase(),
+    // Update sender's balance
+    const accountObject: AccountIdleBalance = {
+      ...previousBalance,
+      balance: previousBalance.balance - event.params.value,
     };
 
     context.AccountIdleBalance.set(accountObject);
-    context.HistoricalAccountIdleBalance.set({
-      ...accountObject,
-      id: accountObject.id + roundTimestamp(event.block.timestamp, 3600),
-      timestamp: BigInt(roundTimestamp(event.block.timestamp, 3600)),
-    });
+    setHistoricalBalance(previousBalance, context, event.block.timestamp);
   }
+
+  if (claveAddresses.has(event.params.to.toLowerCase())) {
+    const previousBalance: AccountIdleBalance = {
+      id: event.params.to.toLowerCase() + event.srcAddress.toLowerCase(),
+      balance: receiverBalance == undefined ? 0n : receiverBalance.balance,
+      address: event.params.to.toLowerCase(),
+      token: event.srcAddress.toLowerCase(),
+    };
+    // Update receiver's balance
+    const accountObject: AccountIdleBalance = {
+      ...previousBalance,
+      balance: previousBalance.balance + event.params.value,
+    };
+
+    context.AccountIdleBalance.set(accountObject);
+    setHistoricalBalance(previousBalance, context, event.block.timestamp);
+  }
+}
+
+function setHistoricalBalance(
+  accountObject: AccountIdleBalance,
+  context: handlerContext,
+  timestamp: number
+) {
+  context.HistoricalAccountIdleBalance4Hours.set({
+    ...accountObject,
+    id: accountObject.id + roundTimestamp(timestamp, 3600 * 4),
+    timestamp: BigInt(roundTimestamp(timestamp, 3600 * 4)),
+  });
+  context.HistoricalAccountIdleBalance1Day.set({
+    ...accountObject,
+    id: accountObject.id + roundTimestamp(timestamp),
+    timestamp: BigInt(roundTimestamp(timestamp)),
+  });
+  context.HistoricalAccountIdleBalance1Week.set({
+    ...accountObject,
+    id: accountObject.id + roundTimestamp(timestamp, 86400 * 7),
+    timestamp: BigInt(roundTimestamp(timestamp, 86400 * 7)),
+  });
+  context.HistoricalAccountIdleBalance1Month.set({
+    ...accountObject,
+    id: accountObject.id + roundTimestamp(timestamp, 86400 * 30),
+    timestamp: BigInt(roundTimestamp(timestamp, 86400 * 30)),
+  });
 }

@@ -4,7 +4,12 @@ type Account {
   id: ID! # User address
   address: String! @index
   idleBalances: [AccountIdleBalance!]! @derivedFrom(field: "address")
-  historicalIdleBalances: [HistoricalAccountIdleBalance!]! @derivedFrom(field: "address")
+  historicalIdleBalancesHourly: [HistoricalAccountIdleBalance4Hours!]!
+    @derivedFrom(field: "address")
+  historicalIdleBalancesDaily: [HistoricalAccountIdleBalance1Day!]! @derivedFrom(field: "address")
+  historicalIdleBalancesWeekly: [HistoricalAccountIdleBalance1Week!]! @derivedFrom(field: "address")
+  historicalIdleBalancesMonthly: [HistoricalAccountIdleBalance1Month!]!
+    @derivedFrom(field: "address")
 }
 
 # IDLE
@@ -16,7 +21,31 @@ type AccountIdleBalance @index(fields: ["address", "balance"]) {
   token: String! @index
 }
 
-type HistoricalAccountIdleBalance @index(fields: ["address", "timestamp"]) {
+type HistoricalAccountIdleBalance4Hours @index(fields: ["address", "timestamp"]) {
+  id: ID! # User address + token address + timestamp
+  address: String! @index
+  balance: BigInt!
+  token: String! @index
+  timestamp: BigInt! @index
+}
+
+type HistoricalAccountIdleBalance1Day @index(fields: ["address", "timestamp"]) {
+  id: ID! # User address + token address + timestamp
+  address: String! @index
+  balance: BigInt!
+  token: String! @index
+  timestamp: BigInt! @index
+}
+
+type HistoricalAccountIdleBalance1Week @index(fields: ["address", "timestamp"]) {
+  id: ID! # User address + token address + timestamp
+  address: String! @index
+  balance: BigInt!
+  token: String! @index
+  timestamp: BigInt! @index
+}
+
+type HistoricalAccountIdleBalance1Month @index(fields: ["address", "timestamp"]) {
   id: ID! # User address + token address + timestamp
   address: String! @index
   balance: BigInt!
